@@ -1042,6 +1042,15 @@ $.extend($.validator, {
 					}
 					previous.valid = valid;
 					validator.stopRequest(element, valid);
+				},
+				error: function (xhr, status, error) {
+					var errors = {};
+					var message = validator.defaultMessage( element, "remote" );
+					errors[element.name] = previous.message = $.isFunction(message) ? message(value) : message;
+					validator.invalid[element.name] = true;
+					validator.showErrors(errors);
+					previous.valid = false;
+					validator.stopRequest(element, false);
 				}
 			}, param));
 			return "pending";
